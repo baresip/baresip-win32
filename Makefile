@@ -27,9 +27,15 @@ WINE      := wine
 # Compiler and Linker Flags
 #
 
-CFLAGS    := "-DFD_SETSIZE=1024 -Werror"
+CFLAGS    := -DFD_SETSIZE=1024 \
+	-isystem $(PWD)/openssl/include
 
-LFLAGS    := -L$(SYSROOT)/lib/
+LFLAGS    := -L$(SYSROOT)/lib/ \
+	-L$(PWD)/openssl \
+	-L$(PWD)/rem
+
+# workaround for linker order (note, the order is important)
+LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm
 
 
 COMMON_FLAGS := CC=$(CC) \
@@ -37,6 +43,7 @@ COMMON_FLAGS := CC=$(CC) \
 		RANLIB=$(RANLIB) \
 		EXTRA_CFLAGS="$(CFLAGS)" \
 		EXTRA_LFLAGS="$(LFLAGS)" \
+		LIBS="$(LIBS)" \
 		SYSROOT=$(SYSROOT) \
 		SYSROOT_ALT= \
 		HAVE_GETOPT=1 \
@@ -49,9 +56,9 @@ COMMON_FLAGS := CC=$(CC) \
 		PEDANTIC= \
 		OPT_SIZE=1 \
 		OS=win32 \
-		USE_OPENSSL= \
-		USE_OPENSSL_DTLS= \
-		USE_OPENSSL_SRTP= \
+		USE_OPENSSL=yes \
+		USE_OPENSSL_DTLS=yes \
+		USE_OPENSSL_SRTP=yes \
 		USE_ZLIB=
 
 default:	retest baresip
@@ -65,6 +72,7 @@ librem.a:	Makefile libre.a
 	@make $@ -C rem $(COMMON_FLAGS)
 
 .PHONY: retest
+test: retest
 retest:		Makefile librem.a libre.a
 	@rm -f retest/retest
 	make -C retest $(COMMON_FLAGS) LIBRE_SO=$(PWD)/re \
@@ -79,6 +87,12 @@ baresip:	Makefile librem.a libre.a
 		LIBRE_SO=$(PWD)/re LIBREM_PATH=$(PWD)/rem
 	cd baresip && $(WINE) selftest.exe && cd ..
 
+.PHONY: openssl
+openssl:
+	cd openssl && \
+		CC=$(CC) RANLIB=$(RANLIB) AR=$(AR) \
+		./Configure mingw no-shared && \
+		make build_libs
 
 clean:
 	make distclean -C baresip

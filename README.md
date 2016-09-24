@@ -20,17 +20,24 @@ sudo port install i386-mingw32-gcc wine
 
 ## Copy the source code
 
-```base
-$ wget http://www.creytiv.com/pub/re-0.4.15.tar.gz
+```bash
+$ wget http://www.creytiv.com/pub/re-0.4.17.tar.gz
 $ wget http://www.creytiv.com/pub/rem-0.4.7.tar.gz
 $ wget http://www.creytiv.com/pub/retest-0.4.8.tar.gz
-$ wget http://www.creytiv.com/pub/baresip-0.4.18.tar.gz
+$ wget http://www.creytiv.com/pub/baresip-0.4.20.tar.gz
+$ wget https://www.openssl.org/source/openssl-1.1.0a.tar.gz
 ```
 
 ... and unpack in the root directory.
 
 
 ## Cross-Compile the projects
+
+You must build openssl first:
+
+```bash
+$ make openssl
+```
 
 ```bash
 $ make
