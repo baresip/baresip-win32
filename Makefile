@@ -35,7 +35,8 @@ LFLAGS    := -L$(SYSROOT)/lib/ \
 	-L$(PWD)/rem
 
 # workaround for linker order (note, the order is important)
-LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm
+LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
+	-lgdi32 -lcrypt32
 
 
 COMMON_FLAGS := CC=$(CC) \
