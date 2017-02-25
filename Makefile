@@ -63,6 +63,35 @@ COMMON_FLAGS := CC=$(CC) \
 		USE_OPENSSL_SRTP=yes \
 		USE_ZLIB=
 
+OPENSSL_FLAGS := \
+	threads \
+	\
+	no-bf \
+	no-camellia \
+	no-capieng \
+	no-cast \
+	no-comp \
+	no-dso \
+	no-engine \
+	no-gost \
+	no-heartbeats \
+	no-idea \
+	no-md2 \
+	no-md4 \
+	no-mdc2 \
+	no-psk \
+	no-rc2 \
+	no-rc4 \
+	no-rc5 \
+	no-ripemd \
+	no-sctp \
+	no-seed \
+	no-shared \
+	no-srp \
+	no-ssl2 \
+	no-ssl3 \
+
+
 default:	retest baresip
 
 libre.a: Makefile
@@ -93,7 +122,7 @@ baresip:	Makefile librem.a libre.a
 openssl:
 	cd openssl && \
 		CC=$(CC) RANLIB=$(RANLIB) AR=$(AR) \
-		./Configure mingw no-shared && \
+		./Configure mingw $(OPENSSL_FLAGS) && \
 		make build_libs
 
 clean:
