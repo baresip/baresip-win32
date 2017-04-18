@@ -4,6 +4,13 @@
 # Copyright (C) 2010 - 2016 Creytiv.com
 #
 
+
+#
+# To build with 64-bit toolchain:
+#
+# make TUPLE=i686-w64-mingw32
+#
+
 OS        := $(shell uname -s | tr "[A-Z]" "[a-z]")
 
 ifeq ($(OS),linux)
