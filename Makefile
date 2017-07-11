@@ -94,7 +94,6 @@ OPENSSL_FLAGS := \
 	no-seed \
 	no-shared \
 	no-srp \
-	no-ssl2 \
 	no-ssl3 \
 
 
