@@ -90,7 +90,6 @@ OPENSSL_FLAGS := \
 	no-rc2 \
 	no-rc4 \
 	no-rc5 \
-	no-ripemd \
 	no-sctp \
 	no-seed \
 	no-shared \
@@ -112,7 +111,7 @@ librem.a:	Makefile libre.a
 .PHONY: retest
 test: retest
 retest:		Makefile librem.a libre.a
-	@rm -f retest/retest
+	@rm -f retest/retest.exe
 	make -C retest $(COMMON_FLAGS) LIBRE_SO=$(PWD)/re \
 		LIBREM_PATH=$(PWD)/rem
 	cd retest && $(WINE) retest -r
