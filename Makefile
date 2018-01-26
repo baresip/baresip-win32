@@ -73,7 +73,9 @@ COMMON_FLAGS := CC=$(CC) \
 OPENSSL_FLAGS := \
 	threads \
 	\
+	no-async \
 	no-bf \
+	no-blake2 \
 	no-camellia \
 	no-capieng \
 	no-cast \
