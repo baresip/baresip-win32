@@ -70,6 +70,8 @@ COMMON_FLAGS := CC=$(CC) \
 		USE_OPENSSL_SRTP=yes \
 		USE_ZLIB=
 
+EXTRA_MODULES := "fakevideo"
+
 OPENSSL_FLAGS := \
 	threads \
 	\
@@ -122,7 +124,8 @@ baresip:	Makefile librem.a libre.a
 	@rm -f baresip/baresip.exe baresip/src/static.c
 	PKG_CONFIG_LIBDIR="$(SYSROOT)/lib/pkgconfig" \
 	make selftest.exe baresip.exe -C baresip $(COMMON_FLAGS) STATIC=1 \
-		LIBRE_SO=$(PWD)/re LIBREM_PATH=$(PWD)/rem
+		LIBRE_SO=$(PWD)/re LIBREM_PATH=$(PWD)/rem \
+		EXTRA_MODULES=$(EXTRA_MODULES)
 	cd baresip && $(WINE) selftest.exe && cd ..
 
 .PHONY: openssl
