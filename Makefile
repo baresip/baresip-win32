@@ -17,7 +17,8 @@ ifeq ($(OS),linux)
 	TUPLE   := i586-mingw32msvc
 endif
 ifeq ($(OS),darwin)
-	TUPLE	:= i386-mingw32
+	#TUPLE	:= i386-mingw32
+	TUPLE	:= i686-w64-mingw32
 endif
 
 
@@ -43,7 +44,8 @@ LFLAGS    := -L$(SYSROOT)/lib/ \
 
 # workaround for linker order (note, the order is important)
 LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
-	-lgdi32 -lcrypt32
+	-lgdi32 -lcrypt32 \
+	-lstrmiids -lole32 -loleaut32 -static -lstdc++
 
 
 COMMON_FLAGS := CC=$(CC) \
@@ -70,7 +72,7 @@ COMMON_FLAGS := CC=$(CC) \
 		USE_OPENSSL_SRTP=yes \
 		USE_ZLIB=
 
-EXTRA_MODULES := "fakevideo"
+EXTRA_MODULES := "fakevideo dshow"
 
 OPENSSL_FLAGS := \
 	threads \
