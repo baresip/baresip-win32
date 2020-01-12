@@ -35,10 +35,14 @@ WINE      := wine
 # Compiler and Linker Flags
 #
 
-CFLAGS    := -DFD_SETSIZE=1024 \
+CFLAGS    := \
+	-DFD_SETSIZE=1024 \
+	-g -gstabs \
 	-isystem $(PWD)/openssl/include
 
-LFLAGS    := -L$(SYSROOT)/lib/ \
+LFLAGS    := \
+	-g -gstabs \
+	-L$(SYSROOT)/lib/ \
 	-L$(PWD)/openssl \
 	-L$(PWD)/rem
 
@@ -65,14 +69,19 @@ COMMON_FLAGS := CC=$(CC) \
 		HAVE_INET_PTON=1 \
 		HAVE_INET6=1 \
 		PEDANTIC= \
-		OPT_SIZE=1 \
+		OPT_SIZE= \
 		OS=win32 \
 		USE_OPENSSL=yes \
 		USE_OPENSSL_DTLS=yes \
 		USE_OPENSSL_SRTP=yes \
 		USE_ZLIB=
 
-EXTRA_MODULES := "fakevideo dshow"
+EXTRA_MODULES := \
+	aubridge \
+	aufile \
+	dshow \
+	fakevideo
+
 
 OPENSSL_FLAGS := \
 	threads \
@@ -127,7 +136,7 @@ baresip:	Makefile librem.a libre.a
 	PKG_CONFIG_LIBDIR="$(SYSROOT)/lib/pkgconfig" \
 	make selftest.exe baresip.exe -C baresip $(COMMON_FLAGS) STATIC=1 \
 		LIBRE_SO=$(PWD)/re LIBREM_PATH=$(PWD)/rem \
-		EXTRA_MODULES=$(EXTRA_MODULES)
+		EXTRA_MODULES="$(EXTRA_MODULES)"
 	cd baresip && $(WINE) selftest.exe && cd ..
 
 .PHONY: openssl
