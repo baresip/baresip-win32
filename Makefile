@@ -36,7 +36,7 @@ WINE      := wine
 #
 
 CFLAGS    := \
-	-DFD_SETSIZE=1024 \
+	-DFD_SETSIZE=2048 \
 	-g -gstabs \
 	-isystem $(PWD)/openssl/include
 
