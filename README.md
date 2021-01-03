@@ -21,11 +21,12 @@ sudo port install i386-mingw32-gcc wine
 ## Copy the source code
 
 ```bash
-$ wget http://www.creytiv.com/pub/re-0.5.0.tar.gz
-$ wget http://www.creytiv.com/pub/rem-0.5.0.tar.gz
-$ wget http://www.creytiv.com/pub/retest-0.5.0.tar.gz
-$ wget http://www.creytiv.com/pub/baresip-0.5.0.tar.gz
+$ wget https://github.com/baresip/re/archive/v1.1.0.tar.gz
+$ wget https://github.com/baresip/rem/archive/v0.6.0.tar.gz
+$ wget https://github.com/baresip/baresip/archive/v1.0.0.tar.gz
 $ wget https://www.openssl.org/source/openssl-1.1.0e.tar.gz
+
+$ git clone https://github.com/baresip/retest.git
 ```
 
 ... and unpack in the root directory.
