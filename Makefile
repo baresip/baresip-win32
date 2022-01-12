@@ -14,7 +14,7 @@
 OS        := $(shell uname -s | tr "[A-Z]" "[a-z]")
 
 ifeq ($(OS),linux)
-	TUPLE   := i586-mingw32msvc
+	TUPLE   := i686-w64-mingw32
 endif
 ifeq ($(OS),darwin)
 	#TUPLE	:= i386-mingw32
