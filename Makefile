@@ -17,7 +17,6 @@ ifeq ($(OS),linux)
 	TUPLE   := i686-w64-mingw32
 endif
 ifeq ($(OS),darwin)
-	#TUPLE	:= i386-mingw32
 	TUPLE	:= i686-w64-mingw32
 endif
 
@@ -67,7 +66,6 @@ COMMON_FLAGS := CC=$(CC) \
 		HAVE_PTHREAD= \
 		HAVE_PTHREAD_RWLOCK= \
 		HAVE_LIBPTHREAD= \
-		HAVE_INET_PTON=1 \
 		HAVE_INET6=1 \
 		PEDANTIC= \
 		OPT_SIZE= \
