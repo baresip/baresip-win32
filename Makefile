@@ -51,7 +51,7 @@ LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
 	-lstrmiids -lole32 -loleaut32 -static -lstdc++ -lpthread
 
 
-COMMON_FLAGS := -j4 CC=$(CC) \
+COMMON_FLAGS := CC=$(CC) \
 		CXX=$(CXX) \
 		RANLIB=$(RANLIB) \
 		EXTRA_CFLAGS="$(CFLAGS)" \
@@ -124,7 +124,7 @@ openssl:
 	cd openssl && \
 		CC=$(CC) RANLIB=$(RANLIB) AR=$(AR) \
 		./Configure mingw64 $(OPENSSL_FLAGS) && \
-		make -j4 build_libs
+		make build_libs
 
 clean:
 	make distclean -C baresip
