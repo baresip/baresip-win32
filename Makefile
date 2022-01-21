@@ -6,7 +6,7 @@
 
 
 #
-# To build with 64-bit toolchain:
+# To build with 32-bit toolchain:
 #
 # make TUPLE=i686-w64-mingw32
 #
@@ -14,10 +14,10 @@
 OS        := $(shell uname -s | tr "[A-Z]" "[a-z]")
 
 ifeq ($(OS),linux)
-	TUPLE   := i686-w64-mingw32
+	TUPLE   := x86_64-w64-mingw32
 endif
 ifeq ($(OS),darwin)
-	TUPLE	:= i686-w64-mingw32
+	TUPLE	:= x86_64-w64-mingw32
 endif
 
 
@@ -48,32 +48,16 @@ LFLAGS    := \
 # workaround for linker order (note, the order is important)
 LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
 	-lgdi32 -lcrypt32 \
-	-lstrmiids -lole32 -loleaut32 -static -lstdc++
+	-lstrmiids -lole32 -loleaut32 -static -lstdc++ -lpthread
 
 
-COMMON_FLAGS := CC=$(CC) \
+COMMON_FLAGS := -j4 CC=$(CC) \
 		CXX=$(CXX) \
 		RANLIB=$(RANLIB) \
 		EXTRA_CFLAGS="$(CFLAGS)" \
 		EXTRA_LFLAGS="$(LFLAGS)" \
 		LIBS="$(LIBS)" \
-		SYSROOT=$(SYSROOT) \
-		SYSROOT_ALT= \
-		RELEASE=1 \
-		HAVE_GETOPT=1 \
-		HAVE_LIBRESOLV= \
-		HAVE_RESOLV= \
-		HAVE_PTHREAD= \
-		HAVE_PTHREAD_RWLOCK= \
-		HAVE_LIBPTHREAD= \
-		HAVE_INET6=1 \
-		PEDANTIC= \
-		OPT_SIZE= \
-		OS=win32 \
-		USE_OPENSSL=yes \
-		USE_OPENSSL_DTLS=yes \
-		USE_OPENSSL_SRTP=yes \
-		USE_ZLIB=
+		SYSROOT=$(SYSROOT)
 
 EXTRA_MODULES := \
 	aubridge \
@@ -122,12 +106,10 @@ librem.a:	Makefile libre.a
 	@make $@ -C rem $(COMMON_FLAGS)
 
 .PHONY: retest
-test: retest
 retest:		Makefile librem.a libre.a
 	@rm -f retest/retest.exe
 	make -C retest $(COMMON_FLAGS) LIBRE_SO=$(PWD)/re \
 		LIBREM_PATH=$(PWD)/rem
-	cd retest && $(WINE) retest -r
 
 .PHONY: baresip
 baresip:	Makefile librem.a libre.a
@@ -136,14 +118,13 @@ baresip:	Makefile librem.a libre.a
 	make selftest.exe baresip.exe -C baresip $(COMMON_FLAGS) STATIC=1 \
 		LIBRE_SO=$(PWD)/re LIBREM_PATH=$(PWD)/rem \
 		EXTRA_MODULES="$(EXTRA_MODULES)"
-	cd baresip && $(WINE) selftest.exe && cd ..
 
 .PHONY: openssl
 openssl:
 	cd openssl && \
 		CC=$(CC) RANLIB=$(RANLIB) AR=$(AR) \
-		./Configure mingw $(OPENSSL_FLAGS) && \
-		make build_libs
+		./Configure mingw64 $(OPENSSL_FLAGS) && \
+		make -j4 build_libs
 
 clean:
 	make distclean -C baresip
@@ -157,3 +138,8 @@ info:
 dump:
 	@echo "TUPLE = $(TUPLE)"
 	@echo "WINE  = $(WINE)"
+
+.PHONY: test
+test: retest baresip
+	cd retest && $(WINE) retest -r
+	cd baresip && $(WINE) selftest.exe

@@ -1,36 +1,34 @@
 # baresip-win32
-Baresip cross-compiled for Windows using Mingw
+Baresip cross-compiled for Windows using MinGW-w64
 
 
 ## Tools to install
 
-You need to install the Mingw32-compiler and Wine:
+You need to install the MinGW-w64 compiler and Wine:
 
-Debian:
+Debian/Ubuntu:
 
 ```bash
-sudo apt-get install mingw32 wine
+sudo apt-get install mingw-w64 wine
 ```
 
-OSX Using Macports:
+macOS using Homebrew:
 
 ```bash
-sudo port install i386-mingw32-gcc wine
+brew install mingw-w64 wine
 ```
 
 ## Copy the source code
 
 ```bash
-$ wget https://github.com/baresip/re/archive/v1.1.0.tar.gz
-$ wget https://github.com/baresip/rem/archive/v0.6.0.tar.gz
-$ wget https://github.com/baresip/baresip/archive/v1.0.0.tar.gz
-$ wget https://www.openssl.org/source/openssl-1.1.0e.tar.gz
-
-$ git clone https://github.com/baresip/retest.git
+$ git clone https://github.com/baresip/re
+$ git clone https://github.com/baresip/rem
+$ git clone https://github.com/baresip/retest
+$ git clone https://github.com/baresip/baresip
+$ wget https://www.openssl.org/source/openssl-1.1.1m.tar.gz
+$ tar -xf openssl-1.1.1m.tar.gz
+$ mv openssl-1.1.1m openssl
 ```
-
-... and unpack in the root directory.
-
 
 ## Cross-Compile the projects
 
