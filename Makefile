@@ -81,7 +81,6 @@ OPENSSL_FLAGS := \
 	no-dso \
 	no-engine \
 	no-gost \
-	no-heartbeats \
 	no-idea \
 	no-md2 \
 	no-md4 \
