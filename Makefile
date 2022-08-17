@@ -101,25 +101,46 @@ default:	retest baresip
 
 libre.a: Makefile
 	@rm -f re/libre.*
-	$(MAKE) $@ -C re $(COMMON_FLAGS)
+	cmake \
+		-S re \
+		-B re/build \
+		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
+		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
+	cmake --build re/build --target re -j4
+
 
 librem.a:	Makefile libre.a
 	@rm -f rem/librem.*
-	$(MAKE) $@ -C rem $(COMMON_FLAGS)
+	cmake \
+		-S rem \
+		-B rem/build \
+		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake
+	cmake --build rem/build --target rem -j4
+
 
 .PHONY: retest
 retest:		Makefile librem.a libre.a
 	@rm -f retest/retest.exe
-	$(MAKE) -C retest $(COMMON_FLAGS) LIBRE_SO=$(PWD)/re \
-		LIBREM_PATH=$(PWD)/rem
+	cmake \
+		-S retest \
+		-B retest/build \
+		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
+		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
+	cmake --build retest/build -j4
+
 
 .PHONY: baresip
 baresip:	Makefile librem.a libre.a
 	@rm -f baresip/baresip.exe baresip/src/static.c
 	PKG_CONFIG_LIBDIR="$(SYSROOT)/lib/pkgconfig" \
-	$(MAKE) selftest.exe baresip.exe -C baresip $(COMMON_FLAGS) STATIC=1 \
-		LIBRE_SO=$(PWD)/re LIBREM_PATH=$(PWD)/rem \
-		EXTRA_MODULES="$(EXTRA_MODULES)"
+	cmake \
+		-S baresip \
+		-B baresip/build \
+		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
+		-DOPENSSL_ROOT_DIR=$(PWD)/openssl \
+		-DSTATIC=YES
+	cmake --build baresip/build -j4
+
 
 .PHONY: openssl
 openssl:
@@ -129,10 +150,9 @@ openssl:
 		$(MAKE) build_libs
 
 clean:
-	make distclean -C baresip
-	make distclean -C retest
-	make distclean -C rem
-	make distclean -C re
+	for p in baresip retest rem re; do \
+		rm -f $$p/build/* ; \
+	done
 
 info:
 	$(MAKE) $@ -C re $(COMMON_FLAGS)
