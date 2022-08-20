@@ -151,7 +151,7 @@ openssl:
 
 clean:
 	for p in baresip retest rem re; do \
-		rm -f $$p/build/* ; \
+		rm -rf $$p/build ; \
 	done
 
 info:
