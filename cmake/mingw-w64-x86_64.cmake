@@ -5,6 +5,7 @@
 #    *) cd build
 #    *) cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-x86_64.cmake ..
 
+set(CMAKE_SYSTEM_PROCESSOR x86_64)
 set(CMAKE_SYSTEM_NAME Windows)
 set(TOOLCHAIN_PREFIX x86_64-w64-mingw32)
 
