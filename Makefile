@@ -87,6 +87,7 @@ libre.a: Makefile
 	cmake \
 		-S re \
 		-B re/build \
+		-DCMAKE_C_FLAGS="-Werror" \
 		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
 		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
 	cmake --build re/build --target re -j4
@@ -97,6 +98,7 @@ librem.a:	Makefile libre.a
 	cmake \
 		-S rem \
 		-B rem/build \
+		-DCMAKE_C_FLAGS="-Werror" \
 		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake
 	cmake --build rem/build --target rem -j4
 
@@ -107,6 +109,7 @@ retest:		Makefile librem.a libre.a
 	cmake \
 		-S retest \
 		-B retest/build \
+		-DCMAKE_C_FLAGS="-Werror" \
 		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
 		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
 	cmake --build retest/build -j4
@@ -119,6 +122,7 @@ baresip:	Makefile librem.a libre.a
 	cmake \
 		-S baresip \
 		-B baresip/build \
+		-DCMAKE_C_FLAGS="-Werror"
 		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
 		-DOPENSSL_ROOT_DIR=$(PWD)/openssl \
 		-DSTATIC=YES
