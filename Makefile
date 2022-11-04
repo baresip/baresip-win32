@@ -52,23 +52,6 @@ LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
 	-lstrmiids -lole32 -loleaut32 -static -lstdc++ -lpthread -lqwave
 
 
-COMMON_FLAGS := CC=$(CC) \
-		CXX=$(CXX) \
-		RANLIB=$(RANLIB) \
-		EXTRA_CFLAGS="$(CFLAGS)" \
-		EXTRA_LFLAGS="$(LFLAGS)" \
-		LIBS="$(LIBS)" \
-		SYSROOT=$(SYSROOT) \
-		RELEASE=1 \
-		OS=win32
-
-EXTRA_MODULES := \
-	aubridge \
-	aufile \
-	dshow \
-	fakevideo
-
-
 OPENSSL_FLAGS := \
 	threads \
 	\
@@ -153,9 +136,6 @@ clean:
 	for p in baresip retest rem re; do \
 		rm -rf $$p/build ; \
 	done
-
-info:
-	$(MAKE) $@ -C re $(COMMON_FLAGS)
 
 dump:
 	@echo "TUPLE = $(TUPLE)"
