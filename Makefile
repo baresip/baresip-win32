@@ -43,11 +43,10 @@ CFLAGS    := \
 LFLAGS    := \
 	-g -gstabs \
 	-L$(SYSROOT)/lib/ \
-	-L$(PWD)/openssl \
-	-L$(PWD)/rem
+	-L$(PWD)/openssl
 
 # workaround for linker order (note, the order is important)
-LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
+LIBS	:= -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
 	-lgdi32 -lcrypt32 \
 	-lstrmiids -lole32 -loleaut32 -static -lstdc++ -lpthread -lqwave
 
@@ -92,17 +91,8 @@ libre.a: Makefile
 	cmake --build re/build --target re -j4
 
 
-librem.a:	Makefile libre.a
-	@rm -f rem/librem.*
-	cmake \
-		-S rem \
-		-B rem/build \
-		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake
-	cmake --build rem/build --target rem -j4
-
-
 .PHONY: retest
-retest:		Makefile librem.a libre.a
+retest:		Makefile libre.a
 	@rm -f retest/retest.exe
 	cmake \
 		-S retest \
@@ -113,7 +103,7 @@ retest:		Makefile librem.a libre.a
 
 
 .PHONY: baresip
-baresip:	Makefile librem.a libre.a
+baresip:	Makefile libre.a
 	@rm -f baresip/baresip.exe baresip/src/static.c
 	PKG_CONFIG_LIBDIR="$(SYSROOT)/lib/pkgconfig" \
 	cmake \
@@ -133,7 +123,7 @@ openssl:
 		$(MAKE) build_libs
 
 clean:
-	for p in baresip retest rem re; do \
+	for p in baresip retest re; do \
 		rm -rf $$p/build ; \
 	done
 
