@@ -81,6 +81,8 @@ OPENSSL_FLAGS := \
 
 default:	baresip
 
+retest:	libre.a
+
 libre.a: Makefile
 	@rm -f re/libre.*
 	cmake \
