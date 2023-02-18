@@ -79,7 +79,9 @@ OPENSSL_FLAGS := \
 	no-ssl3 \
 
 
-default:	retest baresip
+default:	baresip
+
+retest:	libre.a
 
 libre.a: Makefile
 	@rm -f re/libre.*
@@ -89,17 +91,7 @@ libre.a: Makefile
 		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
 		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
 	cmake --build re/build --target re -j4
-
-
-.PHONY: retest
-retest:		Makefile libre.a
-	@rm -f retest/retest.exe
-	cmake \
-		-S retest \
-		-B retest/build \
-		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
-		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
-	cmake --build retest/build -j4
+	cmake --build re/build --target retest -j4
 
 
 .PHONY: baresip
@@ -123,7 +115,7 @@ openssl:
 		$(MAKE) build_libs
 
 clean:
-	for p in baresip retest re; do \
+	for p in baresip re; do \
 		rm -rf $$p/build ; \
 	done
 
@@ -132,6 +124,6 @@ dump:
 	@echo "WINE  = $(WINE)"
 
 .PHONY: test
-test: retest baresip
-	cd retest && $(WINE) retest -r
+test: libre.a baresip
+	cd re && $(WINE) ./build/test/retest.exe -r -v
 	cd baresip && $(WINE) selftest.exe
