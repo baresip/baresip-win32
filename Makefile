@@ -43,11 +43,10 @@ CFLAGS    := \
 LFLAGS    := \
 	-g -gstabs \
 	-L$(SYSROOT)/lib/ \
-	-L$(PWD)/openssl \
-	-L$(PWD)/rem
+	-L$(PWD)/openssl
 
 # workaround for linker order (note, the order is important)
-LIBS	:= -lrem -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
+LIBS	:= -lssl -lcrypto -lwsock32 -lws2_32 -liphlpapi -lwinmm \
 	-lgdi32 -lcrypt32 \
 	-lstrmiids -lole32 -loleaut32 -static -lstdc++ -lpthread -lqwave
 
@@ -80,7 +79,9 @@ OPENSSL_FLAGS := \
 	no-ssl3 \
 
 
-default:	retest baresip
+default:	baresip
+
+retest:	libre.a
 
 libre.a: Makefile
 	@rm -f re/libre.*
@@ -91,32 +92,11 @@ libre.a: Makefile
 		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
 		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
 	cmake --build re/build --target re -j4
-
-
-librem.a:	Makefile libre.a
-	@rm -f rem/librem.*
-	cmake \
-		-S rem \
-		-B rem/build \
-		-DCMAKE_C_FLAGS="-Werror" \
-		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake
-	cmake --build rem/build --target rem -j4
-
-
-.PHONY: retest
-retest:		Makefile librem.a libre.a
-	@rm -f retest/retest.exe
-	cmake \
-		-S retest \
-		-B retest/build \
-		-DCMAKE_C_FLAGS="-Werror" \
-		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
-		-DOPENSSL_ROOT_DIR=$(PWD)/openssl
-	cmake --build retest/build -j4
+	cmake --build re/build --target retest -j4
 
 
 .PHONY: baresip
-baresip:	Makefile librem.a libre.a
+baresip:	Makefile libre.a
 	@rm -f baresip/baresip.exe baresip/src/static.c
 	PKG_CONFIG_LIBDIR="$(SYSROOT)/lib/pkgconfig" \
 	cmake \
@@ -137,7 +117,7 @@ openssl:
 		$(MAKE) build_libs
 
 clean:
-	for p in baresip retest rem re; do \
+	for p in baresip re; do \
 		rm -rf $$p/build ; \
 	done
 
@@ -146,6 +126,6 @@ dump:
 	@echo "WINE  = $(WINE)"
 
 .PHONY: test
-test: retest baresip
-	cd retest && $(WINE) retest -r
+test: libre.a baresip
+	cd re && $(WINE) ./build/test/retest.exe -r -v
 	cd baresip && $(WINE) selftest.exe
