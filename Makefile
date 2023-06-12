@@ -102,7 +102,7 @@ baresip:	Makefile libre.a
 	cmake \
 		-S baresip \
 		-B baresip/build \
-		-DCMAKE_C_FLAGS="-Werror"
+		-DCMAKE_C_FLAGS="-Werror" \
 		-DCMAKE_TOOLCHAIN_FILE=$(PWD)/cmake/mingw-w64-x86_64.cmake \
 		-DOPENSSL_ROOT_DIR=$(PWD)/openssl \
 		-DSTATIC=YES
