@@ -22,12 +22,10 @@ brew install mingw-w64 wine
 
 ```bash
 $ git clone https://github.com/baresip/re
-$ git clone https://github.com/baresip/rem
-$ git clone https://github.com/baresip/retest
 $ git clone https://github.com/baresip/baresip
-$ wget https://www.openssl.org/source/openssl-1.1.1m.tar.gz
-$ tar -xf openssl-1.1.1m.tar.gz
-$ mv openssl-1.1.1m openssl
+$ wget https://www.openssl.org/source/openssl-3.3.0.tar.gz
+$ tar -xf openssl-3.3.0.tar.gz
+$ mv openssl-3.3.0 openssl
 ```
 
 ## Cross-Compile the projects
